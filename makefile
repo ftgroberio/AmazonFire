@@ -1,12 +1,12 @@
 # This makefile was generated using a template provided from 
 # Harlan James <waldroha@oregonstate.edu>
 #
-PROJ = lab9
+PROJ = AmazonFireGame
 $(CXX) = g++
 SRC = main.cpp 
 SRC += Space.cpp
 SRC += Field.cpp
-SRC += GameLogic.cpp
+SRC += Board.cpp
 OBJ = $(SRC:.cpp=.o)
 BIN = $(PROJ).bin
 CFLAGS =  -pedantic -std=c++11 -lncurses #-Wall

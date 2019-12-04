@@ -14,13 +14,13 @@
 class Space {
 protected:
 public:
+    int data;
     Space *up;
     Space *down;
     Space *left;
     Space *right;
     Space();
     ~Space();
-    virtual int getCh() = 0;
 };
 
 #endif

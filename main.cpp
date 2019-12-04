@@ -9,12 +9,14 @@
 #include <iostream>
 #include "Space.hpp"
 #include "Field.hpp"
-#include "GameLogic.hpp"
+#include "Board.hpp"
 
 int main() {
-    Space *spaceObj;
-    Field fieldObj;
+    Board test;
+    test.createRow(3);
+    test.createRow(3);
+    test.linkRow();
+    test.printData(1);
 
-    spaceObj = &fieldObj;
     return 0;
 }

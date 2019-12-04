@@ -7,8 +7,6 @@ class Field : public Space {
 protected:
 public:
     Field();
-    ~Field();
     int getCh();
-    void startField();
 };
 #endif
