@@ -3,6 +3,10 @@
 
 #include "Space.hpp"
 #include "Field.hpp"
+#include "Tree.hpp"
+#include "Box.hpp"
+#include "Player.hpp"
+#include "TestSpace.hpp"  // delete this!!!!
 
 class Board {
 protected:
@@ -13,6 +17,9 @@ public:
     ~Board();
     void createRow(int);
     void linkRow();
-    void printData(int);
+    void printBoard();
+    Space *getSpace(int, int);
+    void swapSpace(Space *, int, int);
+    void createBoard(int, int);
 };
 #endif

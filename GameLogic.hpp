@@ -2,36 +2,27 @@
 #define FG_GAMELOGIC_HPP
 
 #include <iostream>
-#include "Field.hpp"
-#include "Space.hpp"
+#include <ncurses.h>
+#include <curses.h>
+#include "Board.hpp"
+#include <stdlib.h> /* srand, rand */
+#include <unistd.h>
+#include <time.h>
 
 class GameLogic {
 protected:
+    int boardHeight, boardWidth, ch;
+    // cursor X and Y
+    Board board;
+
 public:
+    int cY, cX, pcY, pcX;
     GameLogic();
     ~GameLogic();
-    void buildField(int, int);
+    void buildField();
+    void takeInput();
+    void movePlayer(int, int);
+    void bottomData();
+    void refreshboard();
 };
 #endif
-
-//    for (int i = 1; i <= row; i++) {
-//        for (int j = 1; j <= col; j++) {
-//            if (i == 1 && j == 1) {
-//                head = new Field;
-//                tail = head;
-//            } else if (i > 1 && j == 1) {
-//                Field *ptr = new Field(0, head, nullptr, nullptr, nullptr);
-//                head->down = ptr;
-//                head = ptr;
-//                tail = head;
-//            } else if (j > 1) {
-//                Field *ptr = new Field(0, nullptr, nullptr, tail, nullptr);
-//                tail->right = ptr;
-//                tail = ptr;
-//            }
-//            if (i > 1) {
-//                Field *top, *next;
-//                top = head->up;
-//            }
-//        }
-//    }

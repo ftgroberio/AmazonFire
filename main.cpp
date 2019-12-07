@@ -7,16 +7,14 @@
  *              function 2 produces a palindrome to a given string.
  ******************************************************************************/
 #include <iostream>
-#include "Space.hpp"
-#include "Field.hpp"
-#include "Board.hpp"
+#include "GameLogic.hpp"
 
 int main() {
-    Board test;
-    test.createRow(3);
-    test.createRow(3);
-    test.linkRow();
-    test.printData(1);
-
+    GameLogic play;
+    // Board boardd;
+    // boardd.createBoard(3, 3);
+    // boardd.printBoard();
+    // boardd.swapSpace(new TestSpace, 1, 1);
+    // boardd.printBoard();
     return 0;
 }

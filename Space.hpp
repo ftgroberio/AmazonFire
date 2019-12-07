@@ -10,11 +10,13 @@
 #define FG_SPACE_HPP
 
 #include <iostream>
+#include <ncurses.h>
 
 class Space {
 protected:
 public:
-    int data;
+    int data, attr;
+    bool enter;
     Space *up;
     Space *down;
     Space *left;

@@ -6,7 +6,12 @@ $(CXX) = g++
 SRC = main.cpp 
 SRC += Space.cpp
 SRC += Field.cpp
+SRC += Tree.cpp
 SRC += Board.cpp
+SRC += Box.cpp
+SRC += Player.cpp
+SRC += TestSpace.cpp  #delete this
+SRC += GameLogic.cpp
 OBJ = $(SRC:.cpp=.o)
 BIN = $(PROJ).bin
 CFLAGS =  -pedantic -std=c++11 -lncurses #-Wall
@@ -14,7 +19,7 @@ VOPT = --tool=memcheck --leak-check=full --show-leak-kinds=all --track-origins=y
 
 .PHONY: default debug clean zip
 
-default: clean $(BIN) debug
+default: clean $(BIN) #debug
 
 debug: $(BIN)
 	@valgrind $(VOPT) ./$(BIN)

@@ -1,7 +1,7 @@
-#include "Field.hpp"
+#include "TestSpace.hpp"
 
-Field::Field() {
-    this->data = 32;
+TestSpace::TestSpace() {
+    this->data = 10;
     this->attr = COLOR_PAIR(1);
     this->enter = true;
     this->up = nullptr;
@@ -9,3 +9,4 @@ Field::Field() {
     this->left = nullptr;
     this->right = nullptr;
 }
+
