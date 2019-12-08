@@ -3,7 +3,7 @@
 Box::Box() {
     this->data = 32;
     this->attr = COLOR_PAIR(2) | A_BOLD | A_ALTCHARSET;
-    this->enter = true;
+    this->enter = false;
     this->movable = true;
     this->up = nullptr;
     this->down = nullptr;

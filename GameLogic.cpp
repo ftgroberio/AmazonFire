@@ -83,16 +83,11 @@ void GameLogic::takeInput() {
 void GameLogic::moveSpace(int prevY, int prevX, int nextY, int nextX) {
     int moveY = nextY - prevY;
     int moveX = nextX - prevX;
+    if (board.getSpace(nextY, nextX)->movable) {
+        this->moveSpace(nextY, nextX, nextY + moveY, nextX + moveX);
+    }
     if (board.getSpace(nextY, nextX)->enter) {
-        if (board.getSpace(nextY, nextX)->movable) {
-            if (board.getSpace(nextY + moveY, nextX + moveX)->enter) {
-                this->moveSpace(nextY, nextX, nextY + moveY, nextX + moveX);
-                board.changeSpace(prevY, prevX, nextY, nextX);
-            }
-
-        } else {
-            board.changeSpace(prevY, prevX, nextY, nextX);
-        }
+        board.changeSpace(prevY, prevX, nextY, nextX);
     }
 }
 void GameLogic::movePlayer() {
