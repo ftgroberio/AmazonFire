@@ -11,8 +11,7 @@
 
 class GameLogic {
 protected:
-    int boardHeight, boardWidth, ch;
-    // cursor X and Y
+    int boardHeight, boardWidth, maxHeight, maxWidth, ch;
     Board board;
 
 public:
@@ -21,8 +20,9 @@ public:
     ~GameLogic();
     void buildField();
     void takeInput();
-    void movePlayer(int, int);
+    void movePlayer();
+    void moveSpace(int, int, int, int);
     void bottomData();
-    void refreshboard();
+    void refreshBoard();
 };
 #endif

@@ -3,14 +3,14 @@
 
 #include "Space.hpp"
 #include "Field.hpp"
-#include "Tree.hpp"
 #include "Box.hpp"
+#include "Wall.hpp"
 #include "Player.hpp"
-#include "TestSpace.hpp"  // delete this!!!!
 
 class Board {
 protected:
     Space *head, *tail;
+    Space *playerPtr;
 
 public:
     Board();
@@ -21,5 +21,8 @@ public:
     Space *getSpace(int, int);
     void swapSpace(Space *, int, int);
     void createBoard(int, int);
+    void changeSpace(int, int, int, int);
+    int getPlayerY();
+    int getPlayerX();
 };
 #endif

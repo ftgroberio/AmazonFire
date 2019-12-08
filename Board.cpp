@@ -23,14 +23,14 @@ Board::~Board() {
 void Board::createRow(int col) {
     for (int i = 1; i <= col; i++) {
         if (i == 1) {
-            tail = new Tree;
+            tail = new Field;
             tail->up = head;
             if (head) {
                 head->down = tail;
             }
             head = tail;
         } else if (i == col) {
-            Space *newPtr = new Tree;
+            Space *newPtr = new Field;
             tail->right = newPtr;
             newPtr->left = tail;
             tail = newPtr;
@@ -83,6 +83,60 @@ Space *Board::getSpace(int row, int col) {
     }
     return ptr;
 }
+void Board::changeSpace(int fromY, int fromX, int toY, int toX) {
+    Space *fromPtr = this->getSpace(fromY, fromX);
+    Space *toPtr = this->getSpace(toY, toX);
+    Space *tempPtr = 0;
+
+    Space *newField = new Field;
+    if (fromPtr->up) {
+        tempPtr = fromPtr->up;
+        tempPtr->down = newField;
+        newField->up = tempPtr;
+    }
+    if (fromPtr->down) {
+        tempPtr = fromPtr->down;
+        tempPtr->up = newField;
+        newField->down = tempPtr;
+    }
+    if (fromPtr->left) {
+        tempPtr = fromPtr->left;
+        tempPtr->right = newField;
+        newField->left = tempPtr;
+    }
+    if (fromPtr->right) {
+        tempPtr = fromPtr->right;
+        tempPtr->left = newField;
+        newField->right = tempPtr;
+    }
+    // Disconnect old node, and link new node to top node
+    if (toPtr->up) {
+        tempPtr = toPtr->up;
+        tempPtr->down = fromPtr;
+        fromPtr->up = tempPtr;
+    }
+    // Disconnect old node, and link new node to bottom node
+    if (toPtr->down) {
+        tempPtr = toPtr->down;
+        tempPtr->up = fromPtr;
+        fromPtr->down = tempPtr;
+    }
+    // Disconnect old node, and link new node to left node
+    if (toPtr->left) {
+        tempPtr = toPtr->left;
+        tempPtr->right = fromPtr;
+        fromPtr->left = tempPtr;
+    }
+    // Disconnect old node, and link new node to right node
+    if (toPtr->right) {
+        tempPtr = toPtr->right;
+        tempPtr->left = fromPtr;
+        fromPtr->right = tempPtr;
+    }
+
+    // delete old node
+    delete toPtr;
+}
 void Board::swapSpace(Space *ptrIn, int row, int col) {
     Space *remPtr = this->getSpace(row, col);
     Space *newPtr = ptrIn;
@@ -122,9 +176,33 @@ void Board::createBoard(int row, int col) {
         this->createRow(col);
         this->linkRow();
     }
-    //    for (int i = 2; i < col; i++) {
-    //        this->swapSpace(new Tree, 2, i);
-    //    }
-    // this->swapSpace(new Box, 1, 1);
+    for (int i = 1; i < col; i++) {
+        this->swapSpace(new Wall, 1, i);
+        this->swapSpace(new Wall, row - 1, i);
+    }
+    for (int i = 1; i < row; i++) {
+        this->swapSpace(new Wall, i, 1);
+        this->swapSpace(new Wall, i, col - 1);
+    }
+    this->swapSpace(new Player, row / 2, col / 2);
+    playerPtr = this->getSpace(row / 2, col / 2);
+}
+int Board::getPlayerX() {
+    Space *ptr = playerPtr;
+    int x = 0;
+    while (ptr) {
+        ptr = ptr->left;
+        x++;
+    }
+    return x;
+}
+int Board::getPlayerY() {
+    Space *ptr = playerPtr;
+    int y = 0;
+    while (ptr) {
+        ptr = ptr->up;
+        y++;
+    }
+    return y;
 }
 

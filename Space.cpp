@@ -10,5 +10,10 @@ Space::Space() {
     init_pair(2, COLOR_YELLOW, COLOR_YELLOW);
     init_pair(3, COLOR_GREEN, COLOR_GREEN);
     init_pair(4, COLOR_RED, COLOR_BLACK);
+    init_pair(5, COLOR_WHITE, COLOR_WHITE);
+}
+int Space::getCh() {
+    // poo
+    // poo
 }
 Space::~Space() {}
