@@ -6,11 +6,17 @@
 #include "Box.hpp"
 #include "Wall.hpp"
 #include "Player.hpp"
+#include "Fire.hpp"
+#include "Enemy.hpp"
+#include <typeinfo>
+#include <vector>
 
 class Board {
 protected:
     Space *head, *tail;
     Space *playerPtr;
+    int brow, bcol, x, y;
+    std::vector<Space *> enemyArray;
 
 public:
     Board();
@@ -22,7 +28,11 @@ public:
     void swapSpace(Space *, int, int);
     void createBoard(int, int);
     void changeSpace(int, int, int, int);
-    int getPlayerY();
-    int getPlayerX();
+    int getSpaceY(Space *);
+    int getSpaceX(Space *);
+    void addObject(Space *);
+    void addEnemy();
+
+    friend class GameLogic;
 };
 #endif

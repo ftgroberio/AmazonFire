@@ -1,6 +1,7 @@
 #include "Board.hpp"
 
 Board::Board() {
+    srand(time(NULL));
     head = nullptr;
     tail = nullptr;
 }
@@ -171,6 +172,8 @@ void Board::swapSpace(Space *ptrIn, int row, int col) {
     delete remPtr;
 }
 void Board::createBoard(int row, int col) {
+    this->brow = row;
+    this->bcol = col;
     this->createRow(col);
     for (int i = 1; i < row; i++) {
         this->createRow(col);
@@ -186,18 +189,15 @@ void Board::createBoard(int row, int col) {
     }
     this->swapSpace(new Player, row / 2, col / 2);
     playerPtr = this->getSpace(row / 2, col / 2);
-}
-int Board::getPlayerX() {
-    Space *ptr = playerPtr;
-    int x = 0;
-    while (ptr) {
-        ptr = ptr->left;
-        x++;
+    for (int i = 0; i < 40; i++) {
+        this->addObject(new Box);
     }
-    return x;
+    for (int i = 0; i < 20; i++) {
+        this->addObject(new Enemy);
+    }
 }
-int Board::getPlayerY() {
-    Space *ptr = playerPtr;
+int Board::getSpaceY(Space *ptrIn) {
+    Space *ptr = ptrIn;
     int y = 0;
     while (ptr) {
         ptr = ptr->up;
@@ -205,4 +205,36 @@ int Board::getPlayerY() {
     }
     return y;
 }
+int Board::getSpaceX(Space *ptrIn) {
+    Space *ptr = ptrIn;
+    int x = 0;
+    while (ptr) {
+        ptr = ptr->left;
+        x++;
+    }
+    return x;
+}
+void Board::addObject(Space *ptrIn) {
+    bool badLocation = true;
+    while (badLocation) {
+        this->y = (rand() % (this->brow - 3)) + 2;
+        this->x = (rand() % (this->bcol - 3)) + 2;
+        if (dynamic_cast<Field *>(this->getSpace(y, x))) {
+            this->swapSpace(ptrIn, y, x);
+            badLocation = false;
+        }
+    }
+}
+void Board::addEnemy() {
 
+    bool badLocation = true;
+    while (badLocation) {
+        this->y = (rand() % (this->brow - 3)) + 2;
+        this->x = (rand() % (this->bcol - 3)) + 2;
+        if (dynamic_cast<Field *>(this->getSpace(y, x))) {
+            this->swapSpace(new Enemy, y, x);
+            enemyArray.push_back(this->getSpace(this->y, this->x));
+            badLocation = false;
+        }
+    }
+}

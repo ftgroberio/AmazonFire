@@ -1,7 +1,7 @@
 #include "Box.hpp"
 
 Box::Box() {
-    this->data = 32;
+    this->data = ACS_BOARD;
     this->attr = COLOR_PAIR(2) | A_BOLD | A_ALTCHARSET;
     this->enter = false;
     this->movable = true;

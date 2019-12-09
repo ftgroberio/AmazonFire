@@ -1,9 +1,8 @@
-#include "Player.hpp"
+#include "Fire.hpp"
 
-Player::Player() {
-    // this->data = 88;
-    this->data = ACS_DIAMOND;
-    this->attr = COLOR_PAIR(4) | A_ALTCHARSET;
+Fire::Fire() {
+    this->data = ACS_CKBOARD;
+    this->attr = COLOR_PAIR(6) | A_BOLD | A_BLINK;
     this->enter = false;
     this->movable = false;
     this->up = nullptr;
@@ -11,7 +10,7 @@ Player::Player() {
     this->left = nullptr;
     this->right = nullptr;
 }
-int Player::getCh() {
-    // virtual?
+int Fire::getCh() {
+    // delete
     return this->data;
 }
