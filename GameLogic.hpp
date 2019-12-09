@@ -23,13 +23,13 @@ public:
     int cY, cX, pcY, pcX;
     GameLogic();
     ~GameLogic();
-    void buildField();
     void takeInput();
     void moveSpaceNR(int, int, int, int);
     void moveSpace(int, int, int, int);
     void bottomData();
     void refreshBoard();
     void moveEnemies();
+    void newMove();
     void checkPlayer();
     bool checkSpace(int, int);
 };

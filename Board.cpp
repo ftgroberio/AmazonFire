@@ -209,12 +209,14 @@ void Board::createBoard(int row, int col) {
         this->addObstacle(3, 6);
     }
 
+    this->cleanWall();
+
     for (int i = 0; i < 40; i++) {
         this->addObject(new Box);
     }
 
     for (int i = 0; i < 20; i++) {
-        this->addObject(new Enemy);
+        this->addEnemy();
     }
 }
 int Board::getSpaceY(Space *ptrIn) {
@@ -244,6 +246,28 @@ void Board::addObject(Space *ptrIn) {
         if (dynamic_cast<Field *>(this->getSpace(y, x))) {
             this->swapSpace(ptrIn, y, x);
             badLocation = false;
+        }
+    }
+}
+void Board::cleanWall() {
+    for (int i = 2; i < 4; i++) {
+        for (int j = 2; j < bcol - 1; j++) {
+            this->swapSpace(new Field, i, j);
+        }
+    }
+    for (int i = brow - 3; i < brow - 1; i++) {
+        for (int j = 2; j < bcol - 1; j++) {
+            this->swapSpace(new Field, i, j);
+        }
+    }
+    for (int i = 4; i < brow - 3; i++) {
+        for (int j = 2; j < 5; j++) {
+            this->swapSpace(new Field, i, j);
+        }
+    }
+    for (int i = 4; i < brow - 3; i++) {
+        for (int j = bcol - 4; j < bcol - 1; j++) {
+            this->swapSpace(new Field, i, j);
         }
     }
 }

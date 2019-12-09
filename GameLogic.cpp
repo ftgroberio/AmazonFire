@@ -23,10 +23,6 @@ GameLogic::GameLogic() {
     boardHeight = maxHeight - 5;
     boardWidth = maxWidth;
     board.createBoard(boardHeight, boardWidth);
-    // std::cout << "Height: " << boardHeight << std::endl;
-    // std::cout << "Width: " << boardWidth << std::endl;
-    // this->buildField();
-    /// refresh();
     play = true;
     while ((ch = getch()) != KEY_F(2) && play) {
         this->refreshBoard();
@@ -35,7 +31,7 @@ GameLogic::GameLogic() {
 
         eb = std::chrono::high_resolution_clock::now();
         if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - ee)
-                .count() >= 100) {
+                .count() >= 200) {
             this->moveEnemies();
         }
         if (std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -52,14 +48,6 @@ GameLogic::~GameLogic() {
     getch();
     endwin();
     std::cout << "THANK YOU FOR PLAYING" << std::endl;
-}
-void GameLogic::buildField() {
-    for (cY = 1; cY < boardHeight; ++cY) {
-        for (cX = 1; cX < boardWidth; ++cX) {
-            attron(board.getSpace(cY, cX)->attr);
-            mvaddch(cY, cX, board.getSpace(cY, cX)->data);
-        }
-    }
 }
 void GameLogic::refreshBoard() {
     for (int Y = 1; Y < boardHeight; ++Y) {
@@ -96,11 +84,11 @@ void GameLogic::takeInput() {
     }
     this->moveSpace(pcY, pcX, cY, cX);
 }
-bool GameLogic::checkSpace(int rol, int col) {
-    if (board.getSpace(rol, col)->movable) {
-        this->checkSpace(rol + rol - board.getSpaceY(board.playerPtr),
+bool GameLogic::checkSpace(int row, int col) {
+    if (board.getSpace(row, col)->movable) {
+        this->checkSpace(row + row - board.getSpaceY(board.playerPtr),
                          col + col - board.getSpaceX(board.playerPtr));
-    } else if (board.getSpace(rol, col)->enter) {
+    } else if (board.getSpace(row, col)->enter) {
         return true;
     } else {
         return false;
@@ -135,27 +123,62 @@ void GameLogic::moveSpaceNR(int prevY, int prevX, int nextY, int nextX) {
         if (board.getSpace(nextY, nextX)->enter) {
             board.changeSpace(prevY, prevX, nextY, nextX);
         } else if (std::abs(moveY)) {
-            if (prevX > board.getSpaceX(board.playerPtr) &&
-                board.getSpace(nextY, nextX - 1)->enter) {
-
-                board.changeSpace(prevY, prevX, nextY, nextX - 1);
-
-            } else if (board.getSpace(nextY, nextX + 1)->enter) {
-
-                board.changeSpace(prevY, prevX, nextY, nextX + 1);
+            srand(time(NULL));
+            switch (rand() % 2) {
+                case 1: {
+                    if (board.getSpace(nextY, nextX + 1)->enter) {
+                        board.changeSpace(prevY, prevX, nextY, nextX + 1);
+                        break;
+                    }
+                }
+                case 0: {
+                    if (prevX > board.getSpaceX(board.playerPtr) &&
+                        board.getSpace(nextY, nextX - 1)->enter) {
+                        board.changeSpace(prevY, prevX, nextY, nextX - 1);
+                        break;
+                    }
+                }
             }
         } else if (std::abs(moveX)) {
-            if (prevY > board.getSpaceY(board.playerPtr) &&
-                board.getSpace(nextY - 1, nextX)->enter) {
-
-                board.changeSpace(prevY, prevX, nextY - 1, nextX);
-
-            } else if (board.getSpace(nextY + 1, nextX)->enter) {
-
-                board.changeSpace(prevY, prevX, nextY + 1, nextX);
+            srand(time(NULL));
+            switch (rand() % 2) {
+                case 1: {
+                    if (prevY > board.getSpaceY(board.playerPtr) &&
+                        board.getSpace(nextY - 1, nextX)->enter) {
+                        board.changeSpace(prevY, prevX, nextY - 1, nextX);
+                        break;
+                    }
+                }
+                case 0: {
+                    if (board.getSpace(nextY + 1, nextX)->enter) {
+                        board.changeSpace(prevY, prevX, nextY + 1, nextX);
+                        break;
+                    }
+                }
             }
         }
     }
+}
+void GameLogic::newMove() {
+
+    int pY = board.getSpaceY(board.playerPtr);
+    int pX = board.getSpaceX(board.playerPtr);
+
+    for (int i = 0; i < board.enemyArray.size() / 4; i++) {
+
+        int e = rand() % board.enemyArray.size();
+        int eY = board.getSpaceY(board.enemyArray[e]);
+        int eX = board.getSpaceX(board.enemyArray[e]);
+
+        int distY = eY - pY;
+        int distX = eX - pX;
+
+        if (std::abs(distY) == 1 && std::abs(distX) == 1) {
+        } else if (std::abs(distY) > std::abs(distX)) {
+        } else {
+        }
+    }
+    ee = std::chrono::high_resolution_clock::now();
 }
 void GameLogic::moveEnemies() {
     int pY = board.getSpaceY(board.playerPtr);
@@ -165,6 +188,7 @@ void GameLogic::moveEnemies() {
 
         int eY = board.getSpaceY(board.enemyArray[e]);
         int eX = board.getSpaceX(board.enemyArray[e]);
+
         if (std::abs(eY - pY) > std::abs(eX - pX)) {
             if (eY > pY) {
                 // player is above enemy
@@ -173,9 +197,9 @@ void GameLogic::moveEnemies() {
                 // player is below enemy
                 this->moveSpaceNR(eY, eX, eY + 1, eX);
             }
-        } else {
-            //            eY = board.getSpaceY(board.enemyArray[e]);
-            //           eX = board.getSpaceX(board.enemyArray[e]);
+        } else if (std::abs(eY - pY) < std::abs(eX - pX)) {
+            eY = board.getSpaceY(board.enemyArray[e]);
+            eX = board.getSpaceX(board.enemyArray[e]);
             if (eX > pX) {
                 this->moveSpaceNR(eY, eX, eY, eX - 1);
             } else {

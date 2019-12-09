@@ -31,6 +31,7 @@ public:
     int getSpaceY(Space *);
     int getSpaceX(Space *);
     void addObject(Space *);
+    void cleanWall();
     void addEnemy();
     void addObstacle(int, int);
 
