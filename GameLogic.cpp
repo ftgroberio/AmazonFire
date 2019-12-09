@@ -25,12 +25,13 @@ GameLogic::GameLogic() {
     board.createBoard(boardHeight, boardWidth);
     // std::cout << "Height: " << boardHeight << std::endl;
     // std::cout << "Width: " << boardWidth << std::endl;
-    this->buildField();
-    refresh();
+    // this->buildField();
+    /// refresh();
     play = true;
     while ((ch = getch()) != KEY_F(2) && play) {
+        this->refreshBoard();
+        this->checkPlayer();
         this->takeInput();
-        this->moveSpace(pcY, pcX, cY, cX);
 
         eb = std::chrono::high_resolution_clock::now();
         if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - ee)
@@ -43,12 +44,14 @@ GameLogic::GameLogic() {
             spawnTime = std::chrono::high_resolution_clock::now();
         }
         this->bottomData();
-        this->refreshBoard();
     }
 }
 GameLogic::~GameLogic() {
     // remove windows
+    timeout(10000);  // wait 500ms for key press
+    getch();
     endwin();
+    std::cout << "THANK YOU FOR PLAYING" << std::endl;
 }
 void GameLogic::buildField() {
     for (cY = 1; cY < boardHeight; ++cY) {
@@ -90,6 +93,27 @@ void GameLogic::takeInput() {
             cY++;
             break;
         }
+    }
+    this->moveSpace(pcY, pcX, cY, cX);
+}
+bool GameLogic::checkSpace(int rol, int col) {
+    if (board.getSpace(rol, col)->movable) {
+        this->checkSpace(rol + rol - board.getSpaceY(board.playerPtr),
+                         col + col - board.getSpaceX(board.playerPtr));
+    } else if (board.getSpace(rol, col)->enter) {
+        return true;
+    } else {
+        return false;
+    }
+}
+void GameLogic::checkPlayer() {
+    int pY = board.getSpaceY(board.playerPtr);
+    int pX = board.getSpaceX(board.playerPtr);
+    if (this->checkSpace(pY + 1, pX) || this->checkSpace(pY - 1, pX) ||
+        this->checkSpace(pY, pX + 1) || this->checkSpace(pY, pX - 1)) {
+        this->play = true;
+    } else {
+        this->play = false;
     }
 }
 void GameLogic::moveSpace(int prevY, int prevX, int nextY, int nextX) {

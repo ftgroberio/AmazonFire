@@ -189,9 +189,30 @@ void Board::createBoard(int row, int col) {
     }
     this->swapSpace(new Player, row / 2, col / 2);
     playerPtr = this->getSpace(row / 2, col / 2);
+
+    int randQuant = (rand() % 3) + 1;
+    for (int i = 0; i < randQuant; i++) {
+        this->addObstacle(10, 20);
+    }
+    randQuant = (rand() % 10) + 13;
+    for (int i = 0; i < randQuant; i++) {
+        this->addObstacle(3, 16);
+    }
+
+    randQuant = (rand() % 8) + 12;
+    for (int i = 0; i < randQuant; i++) {
+        this->addObstacle(8, 6);
+    }
+
+    randQuant = (rand() % 7) + 20;
+    for (int i = 0; i < randQuant; i++) {
+        this->addObstacle(3, 6);
+    }
+
     for (int i = 0; i < 40; i++) {
         this->addObject(new Box);
     }
+
     for (int i = 0; i < 20; i++) {
         this->addObject(new Enemy);
     }
@@ -216,9 +237,10 @@ int Board::getSpaceX(Space *ptrIn) {
 }
 void Board::addObject(Space *ptrIn) {
     bool badLocation = true;
+    int x, y;
     while (badLocation) {
-        this->y = (rand() % (this->brow - 3)) + 2;
-        this->x = (rand() % (this->bcol - 3)) + 2;
+        y = (rand() % (this->brow - 3)) + 2;
+        x = (rand() % (this->bcol - 3)) + 2;
         if (dynamic_cast<Field *>(this->getSpace(y, x))) {
             this->swapSpace(ptrIn, y, x);
             badLocation = false;
@@ -228,13 +250,44 @@ void Board::addObject(Space *ptrIn) {
 void Board::addEnemy() {
 
     bool badLocation = true;
+    int x, y;
     while (badLocation) {
-        this->y = (rand() % (this->brow - 3)) + 2;
-        this->x = (rand() % (this->bcol - 3)) + 2;
+        y = (rand() % (this->brow - 3)) + 2;
+        x = (rand() % (this->bcol - 3)) + 2;
         if (dynamic_cast<Field *>(this->getSpace(y, x))) {
             this->swapSpace(new Enemy, y, x);
-            enemyArray.push_back(this->getSpace(this->y, this->x));
+            enemyArray.push_back(this->getSpace(y, x));
             badLocation = false;
+        }
+    }
+}
+void Board::addObstacle(int row, int col) {
+
+    bool badLocation = true;
+    int attempts = 0;
+    int x, y;
+    while (badLocation) {
+        y = (rand() % this->brow);
+        x = (rand() % this->bcol);
+        attempts++;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (dynamic_cast<Field *>(this->getSpace(y + i, x + j))) {
+                    badLocation = false;
+                } else {
+                    badLocation = true;
+                    i = 999;
+                    j = 999;
+                }
+            }
+        }
+        if (attempts > 2) {
+            return;
+        }
+    }
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            this->swapSpace(new Wall, y + i, x + j);
         }
     }
 }

@@ -15,7 +15,7 @@ class Board {
 protected:
     Space *head, *tail;
     Space *playerPtr;
-    int brow, bcol, x, y;
+    int brow, bcol;
     std::vector<Space *> enemyArray;
 
 public:
@@ -32,6 +32,7 @@ public:
     int getSpaceX(Space *);
     void addObject(Space *);
     void addEnemy();
+    void addObstacle(int, int);
 
     friend class GameLogic;
 };

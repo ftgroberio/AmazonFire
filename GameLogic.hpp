@@ -31,5 +31,6 @@ public:
     void refreshBoard();
     void moveEnemies();
     void checkPlayer();
+    bool checkSpace(int, int);
 };
 #endif
