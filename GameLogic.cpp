@@ -89,13 +89,12 @@ void GameLogic::welcomeScreen() {
     }
 }
 void GameLogic::enemyLogic() {
-    eb = std::chrono::high_resolution_clock::now();
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - ee)
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - ee)
             .count() >= turn) {
         this->moveEnemies();
     }
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - spawnTime)
-            .count() >= 50) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(
+            nowTime - spawnTime).count() >= 50) {
         board->addEnemy();
         spawnTime = std::chrono::high_resolution_clock::now();
     }
@@ -103,11 +102,20 @@ void GameLogic::enemyLogic() {
 void GameLogic::refreshBoard() {
     for (int Y = 1; Y < boardHeight; ++Y) {
         for (int X = 1; X < boardWidth; ++X) {
+
+            if (dynamic_cast<Fire *>(board->getSpace(Y, X))) {
+                if (std::chrono::duration_cast<std::chrono::milliseconds>(
+                        nowTime - fireTime).count() >= 350) {
+                    board->swapSpace(new Field, Y, X);
+                }
+            }
+
             attron(board->getSpace(Y, X)->attr);
             mvaddch(Y, X, board->getSpace(Y, X)->data);
             attroff(board->getSpace(Y, X)->attr);
         }
     }
+    nowTime = std::chrono::high_resolution_clock::now();
     refresh();
 }
 void GameLogic::takeInput() {
@@ -134,14 +142,13 @@ void GameLogic::takeInput() {
         }
         case ' ': {
             board->popBomb();
-
+            // start counting the time since last time a bomb was activated
+            fireTime = std::chrono::high_resolution_clock::now();
             break;
         }
     }
-    if (dynamic_cast<Pie *>(board->getSpace(cY, cX))) {
-        board->swapSpace(new Field, cY, cX);
-        board->pieArray.pop_back();
-    }
+    board->collectPie(cY, cX);
+
     this->moveSpace(pcY, pcX, cY, cX);
     if (board->pieArray.empty()) {
         this->pass = false;
@@ -227,10 +234,9 @@ void GameLogic::moveEnemies() {
     int pX = board->getSpaceX(board->playerPtr);
     for (int i = 0; i < board->enemyArray.size(); i++) {
         /// int e = rand() % board->enemyArray.size();
-        int e = i;
 
-        int eY = board->getSpaceY(board->enemyArray[e]);
-        int eX = board->getSpaceX(board->enemyArray[e]);
+        int eY = board->getSpaceY(board->enemyArray[i]);
+        int eX = board->getSpaceX(board->enemyArray[i]);
 
         if (std::abs(eY - pY) > std::abs(eX - pX)) {
             if (eY > pY) {
@@ -241,8 +247,8 @@ void GameLogic::moveEnemies() {
                 this->moveSpaceNR(eY, eX, eY + 1, eX);
             }
         } else if (std::abs(eY - pY) < std::abs(eX - pX)) {
-            eY = board->getSpaceY(board->enemyArray[e]);
-            eX = board->getSpaceX(board->enemyArray[e]);
+            eY = board->getSpaceY(board->enemyArray[i]);
+            eX = board->getSpaceX(board->enemyArray[i]);
             if (eX > pX) {
                 this->moveSpaceNR(eY, eX, eY, eX - 1);
             } else {

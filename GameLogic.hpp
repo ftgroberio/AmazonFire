@@ -15,7 +15,7 @@ class GameLogic {
 protected:
     int boardHeight, boardWidth, maxHeight, maxWidth, ch, turn;
     std::chrono::high_resolution_clock::time_point begin, eb, ee, spawnTime,
-        end;
+        fireTime, nowTime, end;
     Board *board;
     bool play, pass;
 

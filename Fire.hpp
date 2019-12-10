@@ -5,6 +5,8 @@
 
 class Fire : public Space {
 protected:
+    int fireTime;
+
 public:
     Fire();
     int getCh();

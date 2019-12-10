@@ -10,11 +10,11 @@ Space::Space() {
     init_pair(2, COLOR_BLACK, COLOR_BLUE);
     init_pair(3, COLOR_GREEN, COLOR_GREEN);
     init_pair(4, COLOR_RED, COLOR_BLACK);
-    init_pair(5, COLOR_WHITE, COLOR_WHITE);
-    init_pair(6, COLOR_BLACK, COLOR_YELLOW);
-    init_pair(7, COLOR_MAGENTA, COLOR_GREEN);
-    init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);
-    init_pair(9, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(5, COLOR_WHITE, COLOR_WHITE);     // Bottom data
+    init_pair(6, COLOR_BLACK, COLOR_YELLOW);    // Player
+    init_pair(7, COLOR_MAGENTA, COLOR_GREEN);   // Enemies
+    init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);  // Pies
+    init_pair(9, COLOR_RED, COLOR_YELLOW);      // Fire
 }
 int Space::getCh() {
     // poo

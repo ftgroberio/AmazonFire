@@ -36,6 +36,8 @@ public:
     void addEnemy();
     void removeEnemy(Space *);
     void popBomb();
+    void bombExplosion(Space *);
+    void collectPie(int, int);
     void addPie();
     void addObstacle(int, int);
 
