@@ -15,15 +15,11 @@ GameLogic::GameLogic() {
     keypad(stdscr, TRUE);
     curs_set(0);  // hide cursor
     noecho();
-    cbreak();      // don't interrupt for user input
-    timeout(100);  // wait 500ms for key press
+    cbreak();  // don't interrupt for user input
+    getmaxyx(stdscr, maxHeight, maxWidth);
     /***********************************************/
 
-    getmaxyx(stdscr, maxHeight, maxWidth);
-    boardHeight = maxHeight - 5;
-    boardWidth = maxWidth;
-    play = true;
-    this->pies = 1;
+    this->welcomeScreen();
     while (play) {
         board = new Board;
         board->createBoard(boardHeight, boardWidth, this->pies);
@@ -34,23 +30,13 @@ GameLogic::GameLogic() {
         } else {
             a = pies;
         }
-        int time = 550 - a * 50;
+        this->turn = 550 - a * 50;
         timeout(100);  // wait 500ms for key press
         while ((ch = getch()) != KEY_F(2) && pass && play) {
             this->refreshBoard();
             this->checkPlayer();
             this->takeInput();
-
-            eb = std::chrono::high_resolution_clock::now();
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - ee)
-                    .count() >= time) {
-                this->moveEnemies();
-            }
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(
-                    eb - spawnTime).count() >= 50) {
-                board->addEnemy();
-                spawnTime = std::chrono::high_resolution_clock::now();
-            }
+            this->enemyLogic();
             this->bottomData();
         }
         delete board;
@@ -64,6 +50,56 @@ GameLogic::~GameLogic() {
     getch();
     endwin();
     std::cout << "THANK YOU FOR PLAYING" << std::endl;
+}
+void GameLogic::welcomeScreen() {
+    if (maxHeight < 30 || maxWidth < 80) {
+        printw("Terminal window size is too small.\n");
+        printw("Please make adjustments and restart the game.\n");
+
+        std::cout << "Terminal window size is too small." << std::endl;
+        std::cout << "Please make adjustments and restart"
+                  << " the game." << std::endl;
+        this->play = false;
+    } else {
+        init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);
+        init_pair(7, COLOR_MAGENTA, COLOR_GREEN);
+        this->boardHeight = maxHeight - 5;
+        this->boardWidth = maxWidth;
+        this->pies = 1;
+        this->play = true;
+        move(maxHeight / 2 - 5, maxWidth / 2 - 18);
+        attron(COLOR_PAIR(7));
+        addch(34);
+        attroff(COLOR_PAIR(7));
+        printw(" SURVIVE THE GREEN BACTERIA ");
+        attron(COLOR_PAIR(7));
+        addch(34);
+        attroff(COLOR_PAIR(7));
+        move(maxHeight / 2 - 3, maxWidth / 2 - 15);
+        printw("Collect all the pies! ");
+        attron(COLOR_PAIR(8));
+        addch(ACS_PI);
+        attroff(COLOR_PAIR(8));
+        move(maxHeight / 2 - 2, maxWidth / 2 - 15);
+        printw("Move using the arow keys");
+        move(maxHeight / 2, maxWidth / 2 - 15);
+        attron(A_BLINK);
+        printw("Press any key to start!");
+        attroff(A_BLINK);
+        getch();
+    }
+}
+void GameLogic::enemyLogic() {
+    eb = std::chrono::high_resolution_clock::now();
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - ee)
+            .count() >= turn) {
+        this->moveEnemies();
+    }
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(eb - spawnTime)
+            .count() >= 50) {
+        board->addEnemy();
+        spawnTime = std::chrono::high_resolution_clock::now();
+    }
 }
 void GameLogic::refreshBoard() {
     for (int Y = 1; Y < boardHeight; ++Y) {
@@ -185,8 +221,9 @@ void GameLogic::moveSpaceNR(int prevY, int prevX, int nextY, int nextX) {
 void GameLogic::moveEnemies() {
     int pY = board->getSpaceY(board->playerPtr);
     int pX = board->getSpaceX(board->playerPtr);
-    for (int i = 0; i < board->enemyArray.size() / 4; i++) {
-        int e = rand() % board->enemyArray.size();
+    for (int i = 0; i < board->enemyArray.size(); i++) {
+        /// int e = rand() % board->enemyArray.size();
+        int e = i;
 
         int eY = board->getSpaceY(board->enemyArray[e]);
         int eX = board->getSpaceX(board->enemyArray[e]);
@@ -212,7 +249,7 @@ void GameLogic::moveEnemies() {
     ee = std::chrono::high_resolution_clock::now();
 }
 void GameLogic::bottomData() {
-    move(boardHeight + 2, 5);
+    move(boardHeight, 3);
     attroff(A_ALTCHARSET);
     attron(COLOR_PAIR(4));
     printw("Y: ");
@@ -227,11 +264,18 @@ void GameLogic::bottomData() {
     end = std::chrono::high_resolution_clock::now();
     ss = std::to_string(
         std::chrono::duration_cast<std::chrono::seconds>(end - begin).count());
-    printw("        ");
+    move(boardHeight + 1, 3);
+    printw("Time: ");
     printw("%s", ss.c_str());
     printw("        ");
-    ss = std::to_string(board->pieArray.size());
-    printw("        ");
+    ss = std::to_string(this->pies);
+    move(boardHeight + 2, 3);
+    printw("Level: ");
     printw("%s", ss.c_str());
     printw("        ");
+    ss = std::to_string(abs(board->pieArray.size() - this->pies));
+    move(boardHeight + 3, 3);
+    printw("Pies collected: ");
+    printw("%s", ss.c_str());
+    mvaddch(boardHeight, 20, board->pieArray[0]->data);
 }

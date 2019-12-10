@@ -13,7 +13,7 @@
 
 class GameLogic {
 protected:
-    int boardHeight, boardWidth, maxHeight, maxWidth, ch;
+    int boardHeight, boardWidth, maxHeight, maxWidth, ch, turn;
     std::chrono::high_resolution_clock::time_point begin, eb, ee, spawnTime,
         end;
     Board *board;
@@ -23,11 +23,13 @@ public:
     int cY, cX, pcY, pcX, pies;
     GameLogic();
     ~GameLogic();
+    void welcomeScreen();
     void takeInput();
     void moveSpaceNR(int, int, int, int);
     void moveSpace(int, int, int, int);
     void bottomData();
     void refreshBoard();
+    void enemyLogic();
     void moveEnemies();
     void checkPlayer();
     bool checkSpace(int, int);

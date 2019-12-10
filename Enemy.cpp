@@ -1,7 +1,7 @@
 #include "Enemy.hpp"
 
 Enemy::Enemy() {
-    this->data = 32;
+    this->data = 34;
     // this->data = ACS_DIAMOND;
     this->attr = COLOR_PAIR(7);
     this->enter = false;

@@ -1,9 +1,11 @@
 #include "Player.hpp"
 
 Player::Player() {
-    // this->data = 88;
-    this->data = ACS_DIAMOND;
-    this->attr = COLOR_PAIR(4) | A_ALTCHARSET;
+    // this->data = 176;
+    // this->data = ACS_DIAMOND;
+    this->data = ACS_TTEE;
+    // this->attr = COLOR_PAIR(4) | A_ALTCHARSET;
+    this->attr = COLOR_PAIR(6) | A_ALTCHARSET;
     this->enter = false;
     this->movable = false;
     this->up = nullptr;
@@ -11,7 +13,4 @@ Player::Player() {
     this->left = nullptr;
     this->right = nullptr;
 }
-int Player::getCh() {
-    // virtual?
-    return this->data;
-}
+int Player::getCh() { return this->data; }
