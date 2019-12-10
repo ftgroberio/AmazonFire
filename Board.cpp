@@ -211,11 +211,11 @@ void Board::createBoard(int row, int col, int pies) {
 
     this->cleanWall();
 
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < row * col / 300; i++) {
         this->addObject(new Bomb);
     }
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < row * col / 200; i++) {
         this->addEnemy();
     }
     /* Add pies */
@@ -354,10 +354,12 @@ void Board::bombExplosion(Space *bombIn) {
     bX = bX - 6;
     for (int i = bY; i < bY + 7; i++) {
         for (int j = bX; j < bX + 13; j++) {
-            if (dynamic_cast<Field *>(this->getSpace(i, j))) {
-                this->swapSpace(new Fire, i, j);
-            } else if (dynamic_cast<Enemy *>(this->getSpace(i, j))) {
-                this->removeEnemy(this->getSpace(i, j));
+            if (i > 1 && i < this->brow && j > 1 && j < this->bcol) {
+                if (dynamic_cast<Field *>(this->getSpace(i, j))) {
+                    this->swapSpace(new Fire, i, j);
+                } else if (dynamic_cast<Enemy *>(this->getSpace(i, j))) {
+                    this->removeEnemy(this->getSpace(i, j));
+                }
             }
         }
     }

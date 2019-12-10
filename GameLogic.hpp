@@ -14,19 +14,22 @@
 class GameLogic {
 protected:
     int boardHeight, boardWidth, maxHeight, maxWidth, ch, turn;
-    std::chrono::high_resolution_clock::time_point begin, eb, ee, spawnTime,
-        fireTime, nowTime, end;
+    int cY, cX, pcY, pcX, pies;
+    std::chrono::high_resolution_clock::time_point begin, eb, moveEnemyTime,
+        spawnTime, fireTime, nowTime;
     Board *board;
-    bool play, pass;
+    bool replay,  // true = keeps playing, false = exit game
+        isAlive,  // true = alive, false = dead;
+        pass;     // true = keep collecting pies, false == all pies collected
 
 public:
-    int cY, cX, pcY, pcX, pies;
     GameLogic();
     ~GameLogic();
     void welcomeScreen();
+    void gameOverScreen();
     void takeInput();
     void deathRay(int, int);
-    void moveSpaceNR(int, int, int, int);
+    void moveEnemyTo(int, int, int, int);
     void moveSpace(int, int, int, int);
     void bottomData();
     void refreshBoard();

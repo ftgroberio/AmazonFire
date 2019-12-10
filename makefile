@@ -1,7 +1,7 @@
 # This makefile was generated using a template provided from 
 # Harlan James <waldroha@oregonstate.edu>
 #
-PROJ = AmazonFireGame
+PROJ = SaveThePie
 $(CXX) = g++
 SRC = main.cpp 
 SRC += Space.cpp

@@ -6,18 +6,13 @@
 #include "Space.hpp"
 
 Space::Space() {
-    init_pair(1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(2, COLOR_BLACK, COLOR_BLUE);
-    init_pair(3, COLOR_GREEN, COLOR_GREEN);
-    init_pair(4, COLOR_RED, COLOR_BLACK);
-    init_pair(5, COLOR_WHITE, COLOR_WHITE);     // Bottom data
-    init_pair(6, COLOR_BLACK, COLOR_YELLOW);    // Player
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);     // Empty field
+    init_pair(2, COLOR_RED, COLOR_BLUE);        // Bomb
+    init_pair(4, COLOR_RED, COLOR_BLACK);       // Botton data
+    init_pair(5, COLOR_WHITE, COLOR_WHITE);     // Walls
+    init_pair(6, COLOR_MAGENTA, COLOR_YELLOW);  // Player
     init_pair(7, COLOR_MAGENTA, COLOR_GREEN);   // Enemies
     init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);  // Pies
     init_pair(9, COLOR_RED, COLOR_YELLOW);      // Fire
-}
-int Space::getCh() {
-    // poo
-    // poo
 }
 Space::~Space() {}

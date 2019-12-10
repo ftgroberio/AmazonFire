@@ -1,8 +1,9 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb() {
-    this->data = ACS_LANTERN;
-    this->attr = COLOR_PAIR(2) | A_BOLD | A_ALTCHARSET;
+    // this->data = ACS_LANTERN;
+    this->data = 33;
+    this->attr = COLOR_PAIR(2) | A_BOLD;
     this->enter = false;
     this->movable = true;
     this->up = nullptr;
