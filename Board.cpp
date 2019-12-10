@@ -171,7 +171,7 @@ void Board::swapSpace(Space *ptrIn, int row, int col) {
     // delete old node
     delete remPtr;
 }
-void Board::createBoard(int row, int col) {
+void Board::createBoard(int row, int col, int pies) {
     this->brow = row;
     this->bcol = col;
     this->createRow(col);
@@ -217,6 +217,13 @@ void Board::createBoard(int row, int col) {
 
     for (int i = 0; i < 20; i++) {
         this->addEnemy();
+    }
+    /* Add pies */
+    while (!this->pieArray.empty()) {
+        this->pieArray.pop_back();
+    }
+    for (int i = 0; i < pies; i++) {
+        this->addPie();
     }
 }
 int Board::getSpaceY(Space *ptrIn) {
@@ -271,6 +278,20 @@ void Board::cleanWall() {
         }
     }
 }
+void Board::addPie() {
+
+    bool badLocation = true;
+    int x, y;
+    while (badLocation) {
+        y = (rand() % (this->brow - 3)) + 2;
+        x = (rand() % (this->bcol - 3)) + 2;
+        if (dynamic_cast<Field *>(this->getSpace(y, x))) {
+            this->swapSpace(new Pie, y, x);
+            this->pieArray.push_back(this->getSpace(y, x));
+            badLocation = false;
+        }
+    }
+}
 void Board::addEnemy() {
 
     bool badLocation = true;
@@ -280,7 +301,7 @@ void Board::addEnemy() {
         x = (rand() % (this->bcol - 3)) + 2;
         if (dynamic_cast<Field *>(this->getSpace(y, x))) {
             this->swapSpace(new Enemy, y, x);
-            enemyArray.push_back(this->getSpace(y, x));
+            this->enemyArray.push_back(this->getSpace(y, x));
             badLocation = false;
         }
     }
