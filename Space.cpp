@@ -14,6 +14,7 @@ Space::Space() {
     init_pair(6, COLOR_BLACK, COLOR_YELLOW);
     init_pair(7, COLOR_MAGENTA, COLOR_GREEN);
     init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);
+    init_pair(9, COLOR_YELLOW, COLOR_BLACK);
 }
 int Space::getCh() {
     // poo

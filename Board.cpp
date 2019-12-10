@@ -212,7 +212,7 @@ void Board::createBoard(int row, int col, int pies) {
     this->cleanWall();
 
     for (int i = 0; i < 40; i++) {
-        this->addObject(new Box);
+        this->addObject(new Bomb);
     }
 
     for (int i = 0; i < 20; i++) {
@@ -304,6 +304,46 @@ void Board::addEnemy() {
             this->enemyArray.push_back(this->getSpace(y, x));
             badLocation = false;
         }
+    }
+}
+void Board::removeEnemy(Space *eIn) {
+
+    for (int i = 0; i < this->enemyArray.size(); i++) {
+        if (enemyArray[i] == eIn) {
+            enemyArray.erase(enemyArray.begin() + i);
+            this->swapSpace(new Field, this->getSpaceY(eIn),
+                            this->getSpaceX(eIn));
+            return;
+        }
+    }
+}
+void Board::popBomb() {
+    int pY = this->getSpaceY(this->playerPtr);
+    int pX = this->getSpaceX(this->playerPtr);
+
+    if (dynamic_cast<Bomb *>(this->getSpace(pY, pX - 1))) {
+        this->swapSpace(new Field, pY, pX - 1);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY - 1, pX - 1))) {
+        this->swapSpace(new Field, pY - 1, pX - 1);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY - 1, pX))) {
+        this->swapSpace(new Field, pY - 1, pX);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY - 1, pX + 1))) {
+        this->swapSpace(new Field, pY - 1, pX + 1);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY, pX + 1))) {
+        this->swapSpace(new Field, pY, pX + 1);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY + 1, pX + 1))) {
+        this->swapSpace(new Field, pY + 1, pX + 1);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY + 1, pX))) {
+        this->swapSpace(new Field, pY + 1, pX);
+
+    } else if (dynamic_cast<Bomb *>(this->getSpace(pY + 1, pX - 1))) {
+        this->swapSpace(new Field, pY + 1, pX - 1);
     }
 }
 void Board::addObstacle(int row, int col) {

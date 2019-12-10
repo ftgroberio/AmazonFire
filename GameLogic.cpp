@@ -1,5 +1,4 @@
 #include "GameLogic.hpp"
-#include <typeinfo>
 
 GameLogic::GameLogic() {
     srand(time(NULL));
@@ -133,8 +132,13 @@ void GameLogic::takeInput() {
             cY++;
             break;
         }
+        case ' ': {
+            board->popBomb();
+
+            break;
+        }
     }
-    if (dynamic_cast<Pie*>(board->getSpace(cY, cX))) {
+    if (dynamic_cast<Pie *>(board->getSpace(cY, cX))) {
         board->swapSpace(new Field, cY, cX);
         board->pieArray.pop_back();
     }

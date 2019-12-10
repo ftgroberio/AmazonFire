@@ -25,6 +25,7 @@ public:
     ~GameLogic();
     void welcomeScreen();
     void takeInput();
+    void deathRay(int, int);
     void moveSpaceNR(int, int, int, int);
     void moveSpace(int, int, int, int);
     void bottomData();

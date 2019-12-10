@@ -7,7 +7,8 @@ SRC = main.cpp
 SRC += Space.cpp
 SRC += Field.cpp
 SRC += Board.cpp
-SRC += Box.cpp
+SRC += Bomb.cpp
+SRC += Fire.cpp
 SRC += Pie.cpp
 SRC += Enemy.cpp
 SRC += Wall.cpp
@@ -24,7 +25,7 @@ default: clean $(BIN) debug
 
 debug: $(BIN)
 	@./$(BIN)
-	@valgrind $(VOPT) ./$(BIN)
+	#@valgrind $(VOPT) ./$(BIN)
 
 $(BIN): $(OBJ) 
 	@echo "CC	$@"

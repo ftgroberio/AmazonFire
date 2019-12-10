@@ -13,4 +13,11 @@ Player::Player() {
     this->left = nullptr;
     this->right = nullptr;
 }
-int Player::getCh() { return this->data; }
+int Player::getCh() {
+    if (this->data == ACS_TTEE) {
+        this->data = 88;
+    } else {
+        this->data = ACS_TTEE;
+    }
+    return this->data;
+}

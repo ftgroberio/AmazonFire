@@ -5,7 +5,8 @@
 
 #include "Space.hpp"
 #include "Field.hpp"
-#include "Box.hpp"
+#include "Bomb.hpp"
+#include "Fire.hpp"
 #include "Wall.hpp"
 #include "Player.hpp"
 #include "Pie.hpp"
@@ -33,6 +34,8 @@ public:
     void addObject(Space *);
     void cleanWall();
     void addEnemy();
+    void removeEnemy(Space *);
+    void popBomb();
     void addPie();
     void addObstacle(int, int);
 
