@@ -34,7 +34,6 @@ public:
     ~Board();
     void createRow(int);
     void linkRow();
-    void printBoard();
     Space *getSpace(int, int);
     void swapSpace(Space *, int, int);
     void createBoard(int, int, int);

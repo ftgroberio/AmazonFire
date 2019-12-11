@@ -24,8 +24,8 @@ VOPT = --tool=memcheck --leak-check=full --show-leak-kinds=all --track-origins=y
 default: clean $(BIN) debug 
 
 debug: $(BIN)
-	#@./$(BIN)
-	@valgrind $(VOPT) ./$(BIN)
+	@./$(BIN)
+	#@valgrind $(VOPT) ./$(BIN)
 
 $(BIN): $(OBJ) 
 	@echo "CC	$@"
