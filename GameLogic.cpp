@@ -1,8 +1,19 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - GameLogic class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ ******************************************************************************/
 #include "GameLogic.hpp"
 
+/*******************************************************************************
+ * the contructor of GameLogic controls the flow of the game. A game will
+ * start as soon as the program starts, and the user has the option to play
+ * until the game is over or it can press 'q' to exit current game or the
+ * whole program. The user can also choose to restart the game on the initial
+ * level
+ ******************************************************************************/
 GameLogic::GameLogic() {
     srand(time(NULL));
-    begin = std::chrono::high_resolution_clock::now();
 
     /************************************************
      ************ Ncurses configuration ************/
@@ -19,47 +30,87 @@ GameLogic::GameLogic() {
     init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);
     init_pair(18, COLOR_GREEN, COLOR_BLACK);
     /***********************************************/
+
+    /* replay flag controls when the whole program should finish */
     this->replay = true;
-    // Display welcome screen and instructions
+
     while (replay) {
+        /* Display welcome screen and instructions */
         this->welcomeScreen();
+
+        /* plays until the user is alive or user choses to exit */
         while (isAlive) {
+            /* creates a new board, either because it is a new game or
+             * because the user pregressed to a higher level */
             board = new Board;
             board->createBoard(boardHeight, boardWidth, this->pies);
+
+            /* pass is a boolean flag that controls if the
+             * player has collected enough pies */
             pass = true;
-            int a;
+
+            /* the integers rate and turn control the rate in which
+             * enemies move and spawn */
             if (pies >= 5) {
-                a = 5;
+                rate = 5;
             } else {
-                a = pies;
+                rate = pies;
             }
-            this->turn = 550 - a * 50;
-            timeout(0);  // wait 500ms for key press
+            this->turn = 550 - rate * 50;
+
+            timeout(50);  // wait 50ms for key press
+
+            /* play same board while the player is alive or it
+             * has not collected enough pies */
             while (pass && isAlive) {
+
+                /* updates the board characters */
                 this->refreshBoard();
+
+                /* updates the plyer */
                 this->checkPlayer();
+
+                /* detects user movement, quit key, or if the user has
+                 * attempted to resize window */
                 this->takeInput();
+
+                /* manages enemies, movements */
                 this->enemyLogic();
+
+                /* updates the data plotted on the bottom
+                 * of the screen */
                 this->bottomData();
             }
+
+            /* deletes the current board before creating a new one */
             delete board;
+
+            /* updates the  number of pies */
             this->pies++;
             timeout(10000);
         }
 
+        /* display game over */
         this->gameOverScreen();
     }
 }
+/*******************************************************************************
+ * deletes ncurses screen and frees up memory
+ ******************************************************************************/
 GameLogic::~GameLogic() {
     // remove ncurses screen
     endwin();
 }
+/*******************************************************************************
+ * plots welcome screen and game instructions
+ ******************************************************************************/
 void GameLogic::welcomeScreen() {
     clear();
     // Start counting the clock
     begin = std::chrono::high_resolution_clock::now();
     // Check if the console screen is too small
     if (maxHeight < 40 || maxWidth < 80) {
+
         printw("Terminal window size is too small.\n");
         printw("Please make adjustments and restart the game.\n");
         this->isAlive = false;
@@ -109,6 +160,10 @@ void GameLogic::welcomeScreen() {
         this->isAlive = true;
     }
 }
+/*******************************************************************************
+ * plots game over screen and gives user the option to play again or to exit
+ * the game
+ ******************************************************************************/
 void GameLogic::gameOverScreen() {
     init_pair(11, COLOR_BLACK, COLOR_RED);
     attron(COLOR_PAIR(11));
@@ -141,6 +196,10 @@ void GameLogic::gameOverScreen() {
     }
     attroff(COLOR_PAIR(11));
 }
+/*******************************************************************************
+ * enemyLogic controls when enemies are added to the board and when enemy
+ * movements are performed
+ ******************************************************************************/
 void GameLogic::enemyLogic() {
     if (std::chrono::duration_cast<std::chrono::milliseconds>(
             nowTime - moveEnemyTime).count() >= turn) {
@@ -152,10 +211,17 @@ void GameLogic::enemyLogic() {
         spawnTime = std::chrono::high_resolution_clock::now();
     }
 }
+/*******************************************************************************
+ * refreshes ncurse screen by reading each node of the board and passing
+ * the character information and node attriutes to ncurses
+ ******************************************************************************/
 void GameLogic::refreshBoard() {
+    /* cycle through every node on the board */
     for (int Y = 1; Y < boardHeight; ++Y) {
         for (int X = 1; X < boardWidth; ++X) {
 
+            /* checks if this node is a fire node, if its, check
+             * if it is time to put the fire out */
             if (dynamic_cast<Fire *>(board->getSpace(Y, X))) {
                 if (std::chrono::duration_cast<std::chrono::milliseconds>(
                         nowTime - fireTime).count() >= 350) {
@@ -163,20 +229,36 @@ void GameLogic::refreshBoard() {
                 }
             }
 
+            /* access a node, its ASCII character data, its
+             * ncurses attributes, and plot the node on the screen */
             attron(board->getSpace(Y, X)->attr);
             mvaddch(Y, X, board->getSpace(Y, X)->data);
             attroff(board->getSpace(Y, X)->attr);
         }
     }
+    /* updates the current time of the game for the bottom panel */
     nowTime = std::chrono::high_resolution_clock::now();
+
+    /* refreshes the ncurses standard screen */
     refresh();
 }
+/*******************************************************************************
+ * takeInput collects input from keyboard user interaction. The arrow keys
+ * controls the Player node movement, the q-key quits the game, and KEY_RESIZE
+ * detects if the user attempted to resize the screen. Lastly, the spacebar
+ * is used to activate any Bomb spaces around the Player node
+ ******************************************************************************/
 void GameLogic::takeInput() {
     ch = getch();
+
+    /* access Player node current position */
     cY = board->getSpaceY(board->playerPtr);
     cX = board->getSpaceX(board->playerPtr);
+
+    /* pcY and  pcX are used to store previous coordinates */
     pcY = cY;
     pcX = cX;
+
     switch (ch) {
         case KEY_LEFT: {
             cX--;
@@ -218,6 +300,10 @@ void GameLogic::takeInput() {
         this->pass = false;
     }
 }
+/*******************************************************************************
+ * checks if the player can enter a given node, or performes a push by
+ * recursively calling checkSpace on the bomb object.
+ ******************************************************************************/
 bool GameLogic::checkSpace(int row, int col) {
     if (board->getSpace(row, col)->movable) {
         this->checkSpace(row + row - board->getSpaceY(board->playerPtr),
@@ -228,6 +314,10 @@ bool GameLogic::checkSpace(int row, int col) {
         return false;
     }
 }
+/*******************************************************************************
+ * checks if the player node is surrounded by enemy nodes, if it is, end the
+ * current game by changing the isAlive boolean flag
+ ******************************************************************************/
 void GameLogic::checkPlayer() {
     int pY = board->getSpaceY(board->playerPtr);
     int pX = board->getSpaceX(board->playerPtr);
@@ -238,6 +328,11 @@ void GameLogic::checkPlayer() {
         this->isAlive = false;
     }
 }
+/*******************************************************************************
+ * moves the player, if it can enter a given node, or performes a push by
+ * recursively calling checkSpace on the bomb object. The recursive property
+ * allows the user to push multipe objects at once.
+ ******************************************************************************/
 void GameLogic::moveSpace(int prevY, int prevX, int nextY, int nextX) {
     int moveY = nextY - prevY;
     int moveX = nextX - prevX;
@@ -250,6 +345,10 @@ void GameLogic::moveSpace(int prevY, int prevX, int nextY, int nextX) {
         }
     }
 }
+/*******************************************************************************
+ * a very rudmentary algorithm in which attempts to shorten the distance of
+ * enemy nodes to the player node
+ ******************************************************************************/
 void GameLogic::moveEnemyTo(int prevY, int prevX, int nextY, int nextX) {
     int moveY = nextY - prevY;
     int moveX = nextX - prevX;
@@ -293,6 +392,10 @@ void GameLogic::moveEnemyTo(int prevY, int prevX, int nextY, int nextX) {
         }
     }
 }
+/*******************************************************************************
+ * cycles through the enemy array and initiates the movement of enemies towards
+ * the player position.
+ ******************************************************************************/
 void GameLogic::moveEnemies() {
     int pY = board->getSpaceY(board->playerPtr);
     int pX = board->getSpaceX(board->playerPtr);
@@ -312,14 +415,19 @@ void GameLogic::moveEnemies() {
             eY = board->getSpaceY(board->enemyArray[i]);
             eX = board->getSpaceX(board->enemyArray[i]);
             if (eX > pX) {
+                // player is to the left of enemy
                 this->moveEnemyTo(eY, eX, eY, eX - 1);
             } else {
+                // player is to the right of enemy
                 this->moveEnemyTo(eY, eX, eY, eX + 1);
             }
         }
     }
     moveEnemyTime = std::chrono::high_resolution_clock::now();
 }
+/*******************************************************************************
+ * updates the text information beneath the board
+ ******************************************************************************/
 void GameLogic::bottomData() {
     move(boardHeight, 3);
     attroff(A_ALTCHARSET);
