@@ -1,10 +1,22 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - Board class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ * Description:
+ ******************************************************************************/
 #include "Board.hpp"
 
 Board::Board() {
+    /*******************************************************************************
+     *
+     ******************************************************************************/
     srand(time(NULL));
     head = nullptr;
     tail = nullptr;
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 Board::~Board() {
     Space *ptr = head;
     while (ptr->up) {
@@ -21,6 +33,9 @@ Board::~Board() {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::createRow(int col) {
     for (int i = 1; i <= col; i++) {
         if (i == 1) {
@@ -44,6 +59,9 @@ void Board::createRow(int col) {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::linkRow() {
     Space *top = head->up;
     Space *bot = head;
@@ -55,6 +73,9 @@ void Board::linkRow() {
         bot->up = top;
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::printBoard() {
     Space *ptr = head;
     while (ptr->up) {
@@ -71,6 +92,9 @@ void Board::printBoard() {
         ptr = ptr->down;
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 Space *Board::getSpace(int row, int col) {
     Space *ptr = head;
     while (ptr->up) {
@@ -84,6 +108,9 @@ Space *Board::getSpace(int row, int col) {
     }
     return ptr;
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::changeSpace(int fromY, int fromX, int toY, int toX) {
     Space *fromPtr = this->getSpace(fromY, fromX);
     Space *toPtr = this->getSpace(toY, toX);
@@ -138,6 +165,9 @@ void Board::changeSpace(int fromY, int fromX, int toY, int toX) {
     // delete old node
     delete toPtr;
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::swapSpace(Space *ptrIn, int row, int col) {
     Space *remPtr = this->getSpace(row, col);
     Space *newPtr = ptrIn;
@@ -171,6 +201,9 @@ void Board::swapSpace(Space *ptrIn, int row, int col) {
     // delete old node
     delete remPtr;
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::createBoard(int row, int col, int pies) {
     this->brow = row;
     this->bcol = col;
@@ -226,6 +259,9 @@ void Board::createBoard(int row, int col, int pies) {
         this->addPie();
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 int Board::getSpaceY(Space *ptrIn) {
     Space *ptr = ptrIn;
     int y = 0;
@@ -235,6 +271,9 @@ int Board::getSpaceY(Space *ptrIn) {
     }
     return y;
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 int Board::getSpaceX(Space *ptrIn) {
     Space *ptr = ptrIn;
     int x = 0;
@@ -244,6 +283,9 @@ int Board::getSpaceX(Space *ptrIn) {
     }
     return x;
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::addObject(Space *ptrIn) {
     bool badLocation = true;
     int x, y;
@@ -256,6 +298,9 @@ void Board::addObject(Space *ptrIn) {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::cleanWall() {
     for (int i = 2; i < 4; i++) {
         for (int j = 2; j < bcol - 1; j++) {
@@ -278,6 +323,9 @@ void Board::cleanWall() {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::addPie() {
 
     bool badLocation = true;
@@ -292,6 +340,9 @@ void Board::addPie() {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::addEnemy() {
 
     bool badLocation = true;
@@ -306,6 +357,9 @@ void Board::addEnemy() {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::removeEnemy(Space *eIn) {
 
     for (int i = 0; i < this->enemyArray.size(); i++) {
@@ -317,6 +371,9 @@ void Board::removeEnemy(Space *eIn) {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::popBomb() {
     int pY = this->getSpaceY(this->playerPtr);
     int pX = this->getSpaceX(this->playerPtr);
@@ -346,6 +403,9 @@ void Board::popBomb() {
         this->bombExplosion(this->getSpace(pY + 1, pX - 1));
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::bombExplosion(Space *bombIn) {
     int bY = this->getSpaceY(bombIn);
     int bX = this->getSpaceX(bombIn);
@@ -364,6 +424,9 @@ void Board::bombExplosion(Space *bombIn) {
         }
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::collectPie(int nextY, int nextX) {
 
     if (dynamic_cast<Pie *>(this->getSpace(nextY, nextX))) {
@@ -371,6 +434,9 @@ void Board::collectPie(int nextY, int nextX) {
         this->pieArray.pop_back();
     }
 }
+/*******************************************************************************
+ *
+ ******************************************************************************/
 void Board::addObstacle(int row, int col) {
 
     bool badLocation = true;

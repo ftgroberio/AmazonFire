@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - Pie derived class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ ******************************************************************************/
 #include "Pie.hpp"
 
 Pie::Pie() {
@@ -10,7 +15,4 @@ Pie::Pie() {
     this->left = nullptr;
     this->right = nullptr;
 }
-int Pie::getCh() {
-    // virtual?
-    return this->data;
-}
+int Pie::getCh() { return this->data; }

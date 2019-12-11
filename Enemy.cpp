@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - Enemy derived class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ ******************************************************************************/
 #include "Enemy.hpp"
 
 Enemy::Enemy() {

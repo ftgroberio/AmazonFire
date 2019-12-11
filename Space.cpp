@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Program name: Lab 9
+ * Program name: Final Project - SaveThePie - Space base class
  * Author: Felipe Groberio
- * Date: November 27th, 2019
+ * Date: December 10th, 2019
  ******************************************************************************/
 #include "Space.hpp"
 

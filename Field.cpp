@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - Field derived class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ ******************************************************************************/
 #include "Field.hpp"
 
 Field::Field() {
@@ -10,7 +15,4 @@ Field::Field() {
     this->left = nullptr;
     this->right = nullptr;
 }
-int Field::getCh() {
-    // virtual?
-    return this->data;
-}
+int Field::getCh() { return this->data; }

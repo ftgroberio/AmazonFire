@@ -17,15 +17,15 @@ SRC += GameLogic.cpp
 OBJ = $(SRC:.cpp=.o)
 BIN = $(PROJ).bin
 CFLAGS =  -pedantic -std=c++11 -lncurses #-Wall
-VOPT = --tool=memcheck --leak-check=full --show-leak-kinds=all --track-origins=yes
+VOPT = --tool=memcheck --leak-check=full --show-leak-kinds=all --track-origins=yes -v
 
 .PHONY: default debug clean zip
 
 default: clean $(BIN) debug 
 
 debug: $(BIN)
-	@./$(BIN)
-	#@valgrind $(VOPT) ./$(BIN)
+	#@./$(BIN)
+	@valgrind $(VOPT) ./$(BIN)
 
 $(BIN): $(OBJ) 
 	@echo "CC	$@"

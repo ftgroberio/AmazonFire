@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - Fire derived class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ ******************************************************************************/
 #include "Fire.hpp"
 
 Fire::Fire() {
@@ -9,6 +14,5 @@ Fire::Fire() {
     this->down = nullptr;
     this->left = nullptr;
     this->right = nullptr;
-    this->fireTime = (rand() % 500) + 500;
 }
 int Fire::getCh() { return this->data; }

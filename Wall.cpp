@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Program name: Final Project - SaveThePie - Wall derived class
+ * Author: Felipe Groberio
+ * Date: December 10th, 2019
+ ******************************************************************************/
 #include "Wall.hpp"
 
 Wall::Wall() {
@@ -11,7 +16,4 @@ Wall::Wall() {
     this->right = nullptr;
 }
 
-int Wall::getCh() {
-    // virtual?
-    return this->data;
-}
+int Wall::getCh() { return this->data; }

@@ -2,12 +2,12 @@
 
 GameLogic::GameLogic() {
     srand(time(NULL));
+    begin = std::chrono::high_resolution_clock::now();
 
     /************************************************
      ************ Ncurses configuration ************/
     initscr();
     start_color();
-    assume_default_colors(COLOR_WHITE, COLOR_BLACK);
     keypad(stdscr, TRUE);
     curs_set(0);  // hide cursor
     noecho();
@@ -19,7 +19,7 @@ GameLogic::GameLogic() {
     init_pair(8, COLOR_YELLOW, COLOR_MAGENTA);
     init_pair(18, COLOR_GREEN, COLOR_BLACK);
     /***********************************************/
-
+    this->replay = true;
     // Display welcome screen and instructions
     while (replay) {
         this->welcomeScreen();
