@@ -2,12 +2,13 @@
  * Program name: Final Project - SaveThePie - GameLogic class
  * Author: Felipe Groberio
  * Date: December 10th, 2019
- * Description: gameLogic implements an arcade game with a survivor aspect to
+ * Description: gameLogic implements an arcade game with a survival aspect to
  *              it. The player is tasked to collect all the pies before it is
- *              surrounded by enemies. With each successful level, the player
+ *              surrounded by enemies. With each completed level, the player
  *              has to collect an ever increasing number of pies which are
- *              randomly scattered around the board, while being chased by an
- *              increasingly number of enemies and randomly generated maps.
+ *              randomly scattered throughout the board, while being chased by
+ *              an increasingly number of enemies and navigating randomly
+ *              generated maps.
  ******************************************************************************/
 #ifndef FG_GAMELOGIC_HPP
 #define FG_GAMELOGIC_HPP

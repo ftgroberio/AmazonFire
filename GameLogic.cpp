@@ -127,8 +127,8 @@ void GameLogic::welcomeScreen() {
         attron(COLOR_PAIR(7));
         addch(34);
         attroff(COLOR_PAIR(7));
-        move(maxHeight / 2 - 3, maxWidth / 2 - 15);
-        printw("Collect all the pies! ");
+        move(maxHeight / 2 - 3, maxWidth / 2 - 29);
+        printw("Collect all the pies and move to the next level! ");
         attron(COLOR_PAIR(8));
         addch(ACS_PI);
         attroff(COLOR_PAIR(8));
