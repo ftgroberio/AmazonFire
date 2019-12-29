@@ -1,1 +1,1 @@
-# Amazon Fire, CS162 Final Project
+# SaveThePie game, CS162 Final Project
